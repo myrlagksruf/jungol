@@ -8,13 +8,11 @@ ultas = [int(i) for i in input().split()]
 
 mono = deque()
 
-top = (0, -1)
 area = 0
 su = 0
-roll = 0
 mi = 0
-premi = 0
-
+tops = (0, -1)
+reals = [tops]
 for ind, val in enumerate(ultas):
     su += val
     while mono and ultas[mono[-1]] > val:
@@ -30,23 +28,24 @@ for ind, val in enumerate(ultas):
 
     mi = ultas[mono[0]]
 
-    if top[0] < mi or ind - top[1] >= x:
-        print(f"{ind}\n")
-        area += mi * x
-        roll += 1
-        if ind - top[1] < x:
-            area -= (x - ind + top[1]) * top[0]
-        top = (mi, ind)
+    
+    if (tops[0] > mi or tops[1] - reals[-1][1] >= x) and reals[-1] != tops:
+        reals.append(tops)
         
-    premi = mi
+    if reals[-1][0] < mi:
+        reals.append((mi, ind))
+    tops = (mi, ind)
 
-ind = len(ultas) - 1
-if ind != top[1]:
+if reals[-1][1] != tops[1]:
+    reals.append(tops)
+
+for i in range(1, len(reals)):
+    premi, preind = reals[i - 1]
+    mi, ind = reals[i]
     area += mi * x
-    roll += 1
-    if ind - top[1] < x:
-        area -= (x - ind + top[1]) * top[0]
+    if ind - preind < x:
+        area -= (x - ind + preind) * min(premi, mi)
+    top = (mi, ind)
 
-print(f"{su - area}\n{roll}\n")
-
-
+# print(f"{reals}\n")
+print(f"{su - area}\n{len(reals) - 1}\n")

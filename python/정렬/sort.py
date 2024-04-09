@@ -1,6 +1,3 @@
-import sys
-input = sys.stdin.readline
-print = sys.stdout.write
 from random import randint
 
 def bubble_sort(arr: list[int], reverse=False):
